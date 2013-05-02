@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tube", "Tube\Tube.csproj", "{E029581B-2699-4FF5-8904-E2970D644B9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tube.Specs", "Tube.Specs\Tube.Specs.csproj", "{4FCF1DBC-9C2C-4796-B730-312F229107AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tube.IntegrationTests", "Tube.IntegrationTests\Tube.IntegrationTests.csproj", "{80D9108B-78C8-4EB7-81E2-4BC873075E4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E029581B-2699-4FF5-8904-E2970D644B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E029581B-2699-4FF5-8904-E2970D644B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E029581B-2699-4FF5-8904-E2970D644B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E029581B-2699-4FF5-8904-E2970D644B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FCF1DBC-9C2C-4796-B730-312F229107AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FCF1DBC-9C2C-4796-B730-312F229107AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FCF1DBC-9C2C-4796-B730-312F229107AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FCF1DBC-9C2C-4796-B730-312F229107AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80D9108B-78C8-4EB7-81E2-4BC873075E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80D9108B-78C8-4EB7-81E2-4BC873075E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80D9108B-78C8-4EB7-81E2-4BC873075E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80D9108B-78C8-4EB7-81E2-4BC873075E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
