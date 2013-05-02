@@ -86,7 +86,8 @@ var pipeline = PipelineFactory.Create<CakeMaker>()
 Git Er Done
 ===========
 ```
-pipeline.Run("make cake");
+var cakeMaker = new CakeMaker();
+pipeline.Run("make cake", cakeMaker);
 ```
 Output:
 ```
