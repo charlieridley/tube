@@ -9,7 +9,7 @@ First, define your tasks:
 
 ```
 [TaskName("weigh ingredients")]
-public class Wiegher : Task<CakeMaker>
+public class Weigher : Task<CakeMaker>
 {
   public override void Execute(CakeMaker context)
   {
@@ -76,7 +76,7 @@ public class CakeBuilder : Task<CakeMaker>
 Create a pipeline and configure that all (autoconfigure coming very soon):
 ```
 var pipeline = PipelineFactory.Create<CakeMaker>()
-                              .RegisterTask(new Wiegher())
+                              .RegisterTask(new Weigher())
                               .RegisterTask(new Mixer())
                               .RegisterTask(new Baker())
                               .RegisterTask(new IcingPreparer())
