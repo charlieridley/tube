@@ -38,7 +38,7 @@ App_Data
 
 #Tooling
 _ReSharper*/
-_TeamCity.ZBI.ComTrade/
+_TeamCity.Tube/
 *.resharper
 [Tt]est[Rr]esult*
 *.sass-cache
