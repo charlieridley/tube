@@ -11,7 +11,7 @@ namespace Tube.IntegrationTests
     {
         public ProcessingJob()
         {
-            Log = new List<string>();
+            Log = "";
         }
 
         public bool Initialized { get; set; }
@@ -20,7 +20,7 @@ namespace Tube.IntegrationTests
 
         public bool Perfected { get; set; }
 
-        public IList<string> Log { get; set; }
+        public string Log { get; set; }
 
         public bool Polished { get; set; }
     }
@@ -31,19 +31,19 @@ namespace Tube.IntegrationTests
         public override void Execute(ProcessingJob context)
         {
             context.Initialized = true;
-            context.Log.Add("initialized");
+            context.Log += "initialized";
             OnJobUpdated(context);
         }
     }
 
     [TaskName("munge")]
-    [TaskDependsOn("initialize")]
+    [TaskDependsOn("perfect")]
     public class Munger : Task<ProcessingJob>
     {
         public override void Execute(ProcessingJob context)
         {
             context.Munged = true;
-            context.Log.Add("munged");
+            context.Log += "_munged";
             OnJobUpdated(context);
         }
     }
@@ -55,7 +55,7 @@ namespace Tube.IntegrationTests
         public override void Execute(ProcessingJob context)
         {
             context.Perfected = true;
-            context.Log.Add("perfected");
+            context.Log += "_perfected";
             OnJobUpdated(context);
         }
     }
@@ -67,7 +67,7 @@ namespace Tube.IntegrationTests
         public override void Execute(ProcessingJob context)
         {
             context.Polished = true;
-            context.Log.Add("polished");
+            context.Log += "_polished";
             OnJobUpdated(context);
         }
     }
@@ -82,8 +82,11 @@ namespace Tube.IntegrationTests
                                       .RegisterTask(new Initializer())
                                       .RegisterTask(new Munger())
                                       .RegisterTask(new Perfector());
-        Because of = () =>
-            pipeline.Run("polish", job);
+        Because of = () => pipeline.Run("polish", job);
         It should_have_been_initialized = () => job.Initialized.ShouldBeTrue();
+        It should_have_been_munged = () => job.Munged.ShouldBeTrue();
+        It should_have_been_perfected = () => job.Perfected.ShouldBeTrue();
+        It should_have_been_polished = () => job.Polished.ShouldBeTrue();
+        It should_have_outputted_in_the_correct_order = () => job.Log.ShouldEqual("initialized_perfected_munged_polished");
     }
 }
