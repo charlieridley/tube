@@ -7,7 +7,7 @@ Here's how it works
 
 First, define your tasks:
 
-```
+```c#
 [TaskName("weigh ingredients")]
 public class Weigher : Task<CakeMaker>
 {
@@ -74,7 +74,7 @@ public class CakeBuilder : Task<CakeMaker>
 
 ```
 Create a pipeline and configure that all (autoconfigure coming very soon):
-```
+```c#
 var pipeline = PipelineFactory.Create<CakeMaker>()
                               .RegisterTask(new Weigher())
                               .RegisterTask(new Mixer())
@@ -85,7 +85,7 @@ var pipeline = PipelineFactory.Create<CakeMaker>()
 ```
 Git Er Done
 ===========
-```
+```c#
 var cakeMaker = new CakeMaker();
 pipeline.Run("make cake", cakeMaker);
 ```
