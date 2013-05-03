@@ -3,19 +3,15 @@ using System.Linq;
 
 namespace Tube
 {
-    public abstract class Task<TContext> : ITask<TContext>
+    public abstract class Task<T> : ITask<T>
     {
-        private IPipeline<TContext> pipeline;
-        public abstract void Execute(TContext context);
+        public abstract void Execute(T context);
+
+        public event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
 
         public virtual string GetName()
         {
             var attribute = GetType().GetCustomAttributes(typeof(TaskNameAttribute), true).FirstOrDefault() as TaskNameAttribute;
-            if (attribute == null)
-            {
-                throw new Exception("Task '"+ this.GetType().Name + "' needs to be decorated with a TaskNameAttribute");
-            }
-
             return attribute.Name;
         }
 
@@ -23,21 +19,14 @@ namespace Tube
         {
             var attribute = GetType().GetCustomAttributes(typeof(TaskDependsOnAttribute), true).FirstOrDefault() as TaskDependsOnAttribute;
             return attribute == null ? new string[0] : attribute.TaskNames;
-        }
+        }        
 
-        public void RegisterPipeline(IPipeline<TContext> pipeline)
+        protected void OnJobUpdated(T context)
         {
-            this.pipeline = pipeline;
-        }
-
-        public void SendUpdate<TMessage>(TMessage message)
-        {
-            if (pipeline == null)
+            if (JobUpdated != null)
             {
-                throw new Exception("No pipeline is registered for '" + this.GetType().Name + "'");
+                JobUpdated(this, new JobUpdatedEventArgs<T>(context));
             }
-
-            pipeline.PublishMessage(message);
         }
     }
 }
