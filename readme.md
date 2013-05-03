@@ -7,9 +7,9 @@ Here's how it works
 
 First, define your tasks:
 
-```
+```c#
 [TaskName("weigh ingredients")]
-public class Wiegher : Task<CakeMaker>
+public class Weigher : Task<CakeMaker>
 {
   public override void Execute(CakeMaker context)
   {
@@ -74,9 +74,9 @@ public class CakeBuilder : Task<CakeMaker>
 
 ```
 Create a pipeline and configure that all (autoconfigure coming very soon):
-```
+```c#
 var pipeline = PipelineFactory.Create<CakeMaker>()
-                              .RegisterTask(new Wiegher())
+                              .RegisterTask(new Weigher())
                               .RegisterTask(new Mixer())
                               .RegisterTask(new Baker())
                               .RegisterTask(new IcingPreparer())
@@ -85,8 +85,9 @@ var pipeline = PipelineFactory.Create<CakeMaker>()
 ```
 Git Er Done
 ===========
-```
-pipeline.Run("make cake");
+```c#
+var cakeMaker = new CakeMaker();
+pipeline.Run("make cake", cakeMaker);
 ```
 Output:
 ```
