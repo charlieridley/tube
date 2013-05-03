@@ -104,7 +104,6 @@ namespace Tube.IntegrationTests
         }
     }
 
-
     public class SamplePipeline
     {
         private static IPipeline<CakeMaker> pipeline;
@@ -123,6 +122,25 @@ namespace Tube.IntegrationTests
         It should_have_been_baked = () => cakeMaker.Baked.ShouldBeTrue();
         It should_have_had_icing_prepared = () => cakeMaker.IcingPrepared.ShouldBeTrue();
         It should_have_been_decorated = () => cakeMaker.Decorated.ShouldBeTrue();
+    }
 
+    public class SamplePartialPipeline
+    {
+        private static IPipeline<CakeMaker> pipeline;
+        private static CakeMaker cakeMaker = new CakeMaker();
+        Establish context = () =>
+            pipeline = PipelineFactory.Create<CakeMaker>()
+                                      .RegisterTask(new Weigher())
+                                      .RegisterTask(new Mixer())
+                                      .RegisterTask(new Baker())
+                                      .RegisterTask(new IcingPreparer())
+                                      .RegisterTask(new CakeDecorator())
+                                      .RegisterTask(new CakeBuilder());
+        Because of = () => pipeline.Run("bake", cakeMaker);
+        private It should_have_been_weighed = () => cakeMaker.Weighed.ShouldBeTrue();
+        It should_have_been_mixed = () => cakeMaker.Mixed.ShouldBeTrue();
+        It should_have_been_baked = () => cakeMaker.Baked.ShouldBeTrue();
+        It should_not_have_had_icing_prepared = () => cakeMaker.IcingPrepared.ShouldBeFalse();
+        It should_not_have_been_decorated = () => cakeMaker.Decorated.ShouldBeFalse();
     }
 }
