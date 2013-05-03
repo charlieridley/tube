@@ -1,11 +1,12 @@
-﻿namespace Tube
+﻿using System;
+
+namespace Tube
 {
-    public interface ITask<TContext>
+    public interface ITask<T>
     {
-        void Execute(TContext job);
+        void Execute(T job);
+        event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
         string GetName();
         string[] GetDependencies();
-        void RegisterPipeline(IPipeline<TContext> pipeline);
-        void SendUpdate<TMessage>(TMessage message);
     }
 }
