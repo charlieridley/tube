@@ -1,37 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Tube
 {
-    public class Pipeline<TContext> : IPipeline<TContext>
+    public class Pipeline<T> : IPipeline<T>
     {
         private readonly ITaskOrderer taskOrderer;
-        private readonly Dictionary<string, ITask<TContext>> tasks = new Dictionary<string, ITask<TContext>>();
-        private readonly Dictionary<Type, List<object>> subscribers = new Dictionary<Type, List<object>>();
+        private readonly List<ITask<T>> tasks = new List<ITask<T>>();
+
         public Pipeline(ITaskOrderer taskOrderer)
         {
             this.taskOrderer = taskOrderer;
         }
 
-        public IPipeline<TContext> RegisterTask(ITask<TContext> task)
+        public IPipeline<T> RegisterTask(ITask<T> task)
         {
-            tasks.Add(task.GetName(), task);
+            tasks.Add(task);
+            task.JobUpdated += OnJobUpdated;
             return this;
-        }
+        }        
 
-        public void PublishMessage<TMessage>(TMessage message)
-        {
-            var subscribersForType = subscribers[typeof (TMessage)].Cast<Action<TMessage>>();
-            foreach (var subscription in subscribersForType)
-            {
-                subscription(message);
-            }
-        }
+        public event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
 
-        public TContext Run(string taskName, TContext context)
+        public T Run(string taskName, T context)
         {
             var taskPipeline = taskOrderer.Order(taskName, tasks);
+
             foreach (var task in taskPipeline)
             {
                 task.Execute(context);
@@ -40,14 +34,12 @@ namespace Tube
             return context;
         }
 
-        public void Subscribe<TMessage>(Action<TMessage> subscriber)
+        private void OnJobUpdated(object sender, JobUpdatedEventArgs<T> e)
         {
-            if (!subscribers.ContainsKey(typeof(TMessage)))
-            {
-                subscribers.Add(typeof(TMessage), new List<object>());
-            }
-
-            subscribers[typeof(TMessage)].Add(subscriber);
+           if (JobUpdated != null)
+           {
+               JobUpdated(this, new JobUpdatedEventArgs<T>(e.Context));
+           }
         }
     }
 }

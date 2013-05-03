@@ -4,6 +4,6 @@ namespace Tube
 {
     public interface ITaskOrderer
     {
-        IEnumerable<ITask<T>> Order<T>(string taskName, IDictionary<string, ITask<T>> taskHash);
+        IEnumerable<ITask<T>> Order<T>(string taskName, IEnumerable<ITask<T>> tasks);
     }
 }
