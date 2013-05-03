@@ -118,47 +118,4 @@ namespace Tube.Specs
 
         It should_have_3_tasks = () => result.Count().ShouldEqual(3);
     }
-
-    [Subject(typeof (TaskOrderer))]
-    public class circular_dependencies : WithSubject<TaskOrderer>
-    {
-        private static IDictionary<string, ITask<FakeTaskContext>> tasks = new Dictionary<string, ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task1 = new Mock<ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task2 = new Mock<ITask<FakeTaskContext>>();        
-        private static Exception exception;
-        Establish context = () =>
-        {
-            task1.Setup(x => x.GetDependencies()).Returns(new[] { "task2" });
-            task2.Setup(x => x.GetDependencies()).Returns(new[] { "task1" });
-            tasks.Add("task2", task2.Object);
-            tasks.Add("task1", task1.Object);
-
-        };
-        Because of = () => exception = Catch.Exception(() => Subject.Order("task2", tasks).ToList());
-        It should_throw_exception = () => 
-            exception.Message.ShouldEqual("There were circular dependencies");
-    }
-
-    [Subject(typeof (TaskOrderer))]
-    public class indirect_circular_dependencies : WithSubject<TaskOrderer>
-    {
-        private static IDictionary<string, ITask<FakeTaskContext>> tasks = new Dictionary<string, ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task1 = new Mock<ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task2 = new Mock<ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task3 = new Mock<ITask<FakeTaskContext>>();        
-        private static Exception exception;
-        Establish context = () =>
-        {
-            task1.Setup(x => x.GetDependencies()).Returns(new[] { "task3" });
-            task2.Setup(x => x.GetDependencies()).Returns(new[] { "task1" });
-            task3.Setup(x => x.GetDependencies()).Returns(new[] { "task2" });
-            tasks.Add("task2", task2.Object);
-            tasks.Add("task1", task1.Object);
-            tasks.Add("task3", task3.Object);
-
-        };
-        Because of = () => exception = Catch.Exception(() => Subject.Order("task2", tasks).ToList());
-        It should_throw_exception = () =>
-            exception.Message.ShouldEqual("There were circular dependencies");
-    }
 }

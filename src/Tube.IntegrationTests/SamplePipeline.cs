@@ -7,86 +7,122 @@ using Machine.Specifications;
 
 namespace Tube.IntegrationTests
 {
-    public class ProcessingJob
+    public class CakeMaker
     {
-        public ProcessingJob()
+        public void WeighIngredients()
         {
-            Log = "";
+            Weighed = true;
         }
 
-        public bool Initialized { get; set; }
+        public bool Weighed { get; set; }
 
-        public bool Munged { get; set; }
-
-        public bool Perfected { get; set; }
-
-        public string Log { get; set; }
-
-        public bool Polished { get; set; }
-    }
-
-    [TaskName("initialize")]
-    public class Initializer : Task<ProcessingJob>
-    {
-        public override void Execute(ProcessingJob context)
+        public void MixIngredients()
         {
-            context.Initialized = true;
-            context.Log += "initialized";
-            OnJobUpdated(context);
+            Mixed = true;
         }
-    }
 
-    [TaskName("munge")]
-    [TaskDependsOn("perfect")]
-    public class Munger : Task<ProcessingJob>
-    {
-        public override void Execute(ProcessingJob context)
+        public bool Mixed { get; set; }
+
+        public void Bake()
         {
-            context.Munged = true;
-            context.Log += "_munged";
-            OnJobUpdated(context);
+            Baked = true;
         }
-    }
 
-    [TaskName("perfect")]
-    [TaskDependsOn("initialize")]
-    public class Perfector : Task<ProcessingJob>
-    {
-        public override void Execute(ProcessingJob context)
+        public bool Baked { get; set; }
+
+        public void PrepareIcing()
         {
-            context.Perfected = true;
-            context.Log += "_perfected";
-            OnJobUpdated(context);
+            IcingPrepared = true;
+        }
+
+        public bool IcingPrepared { get; set; }
+
+        public void Decorate()
+        {
+            Decorated = true;
+        }
+
+        public bool Decorated { get; set; }
+    }
+    [TaskName("weigh ingredients")]
+    public class Weigher : Task<CakeMaker>
+    {
+        public List<string> Log = new List<string>();
+        public override void Execute(CakeMaker context)
+        {
+            context.WeighIngredients();
         }
     }
 
-    [TaskName("polish")]
-    [TaskDependsOn("munge")]
-    public class Polisher : Task<ProcessingJob>
+    [TaskName("mix ingredients")]
+    [TaskDependsOn("weigh ingredients")]
+    public class Mixer : Task<CakeMaker>
     {
-        public override void Execute(ProcessingJob context)
+        public override void Execute(CakeMaker context)
         {
-            context.Polished = true;
-            context.Log += "_polished";
-            OnJobUpdated(context);
+            context.MixIngredients();
         }
     }
+
+    [TaskName("bake")]
+    [TaskDependsOn("mix ingredients")]
+    public class Baker : Task<CakeMaker>
+    {
+        public override void Execute(CakeMaker context)
+        {
+            context.Bake();
+        }
+    }
+
+    [TaskName("prepare icing")]
+    [TaskDependsOn("mix ingredients")]
+    public class IcingPreparer : Task<CakeMaker>
+    {
+        public override void Execute(CakeMaker context)
+        {
+            context.PrepareIcing();
+        }
+    }
+
+    [TaskName("decorate")]
+    [TaskDependsOn("prepare icing", "bake")]
+    public class CakeDecorator : Task<CakeMaker>
+    {
+        public override void Execute(CakeMaker context)
+        {
+            context.Decorate();
+        }
+    }
+
+    [TaskName("make cake")]
+    [TaskDependsOn("decorate", "bake")]
+    public class CakeBuilder : Task<CakeMaker>
+    {
+        public override void Execute(CakeMaker context)
+        {
+
+        }
+    }
+
 
     public class SamplePipeline
     {
-        private static IPipeline<ProcessingJob> pipeline;
-        private static ProcessingJob job = new ProcessingJob();
-        Establish context = () => 
-            pipeline = PipelineFactory.Create<ProcessingJob>()
-                                      .RegisterTask(new Polisher())
-                                      .RegisterTask(new Initializer())
-                                      .RegisterTask(new Munger())
-                                      .RegisterTask(new Perfector());
-        Because of = () => pipeline.Run("polish", job);
-        It should_have_been_initialized = () => job.Initialized.ShouldBeTrue();
-        It should_have_been_munged = () => job.Munged.ShouldBeTrue();
-        It should_have_been_perfected = () => job.Perfected.ShouldBeTrue();
-        It should_have_been_polished = () => job.Polished.ShouldBeTrue();
-        It should_have_outputted_in_the_correct_order = () => job.Log.ShouldEqual("initialized_perfected_munged_polished");
+        private static IPipeline<CakeMaker> pipeline;
+        private static CakeMaker cakeMaker = new CakeMaker();
+        Establish context = () =>
+            pipeline = PipelineFactory.Create<CakeMaker>()
+                                      .RegisterTask(new Weigher())
+                                      .RegisterTask(new Mixer())
+                                      .RegisterTask(new Baker())
+                                      .RegisterTask(new IcingPreparer())
+                                      .RegisterTask(new CakeDecorator())
+                                      .RegisterTask(new CakeBuilder());
+        Because of = () => pipeline.Run("make cake", cakeMaker);
+        private It should_have_been_weighed = () => cakeMaker.Weighed.ShouldBeTrue();
+        It should_have_been_mixed = () => cakeMaker.Mixed.ShouldBeTrue();
+        It should_have_been_baked = () => cakeMaker.Baked.ShouldBeTrue();
+        It should_have_had_icing_prepared = () => cakeMaker.IcingPrepared.ShouldBeTrue();
+        It should_have_been_decorated = () => cakeMaker.Decorated.ShouldBeTrue();
+
     }
 }
