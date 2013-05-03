@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IInstanceResolver.cs" />
     <Compile Include="IPipeline.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskOrderer.cs" />

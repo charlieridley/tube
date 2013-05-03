@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tube.Specs", "Tube.Specs\Tu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tube.IntegrationTests", "Tube.IntegrationTests\Tube.IntegrationTests.csproj", "{80D9108B-78C8-4EB7-81E2-4BC873075E4B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{439E9A2C-B9CE-480C-85F7-263A0FDE883D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FAC2BBE2-71F3-4150-9161-0E13E0ACA6CA}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
