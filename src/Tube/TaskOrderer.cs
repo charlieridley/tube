@@ -6,14 +6,17 @@ namespace Tube
 {
     public class TaskOrderer : ITaskOrderer
     {
-        public IEnumerable<ITask<T>> Order<T>(IEnumerable<ITask<T>> tasks)
+        public IEnumerable<ITask<T>> Order<T>(string taskName, IEnumerable<ITask<T>> tasks)
         {
             tasks = tasks.ToArray();
 
             var adjacencyList = tasks.ToDictionary(kvp => kvp.GetName(), kvp => kvp.GetDependencies().ToList());
             var taskDictionary = tasks.ToDictionary(kvp => kvp.GetName(), kvp => kvp);
 
-            return Order(adjacencyList).Select(name => taskDictionary[name]);
+            return Order(adjacencyList)
+                .TakeWhile(s => s != taskName)
+                .Concat(new []{taskName})
+                .Select(name => taskDictionary[name]);
         }
 
         IEnumerable<string> Order(IDictionary<string, List<string>> adjacencyList)

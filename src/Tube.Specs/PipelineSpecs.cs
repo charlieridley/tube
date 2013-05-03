@@ -18,9 +18,9 @@ namespace Tube.Specs
                 task = new Mock<ITask<FakeTaskContext>>();
                 task.Setup(x => x.GetName()).Returns("task1");
                 Subject.RegisterTask(task.Object);
-                The<ITaskOrderer>().WhenToldTo(x => x.Order(Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { task.Object });      
+                The<ITaskOrderer>().WhenToldTo(x => x.Order("task1", Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { task.Object });      
             };
-        Because of = () => result = Subject.Run(job);        
+        Because of = () => result = Subject.Run("task1", job);        
         It should_execute_the_task = () => task.Object.WasToldTo(x => x.Execute(job));
         It should_return_the_context = () => result.ShouldEqual(job);
     }
@@ -36,7 +36,7 @@ namespace Tube.Specs
             task = new Mock<ITask<FakeTaskContext>>();
             task.Setup(x => x.GetName()).Returns("task1");
             Subject.RegisterTask(task.Object);
-            Subject.Run(job);
+            Subject.Run("task1", job);
             Subject.JobUpdated += (s, e) => eventArgs = e;
         };
         Because of = () => task.Raise(x => x.JobUpdated += null, new JobUpdatedEventArgs<FakeTaskContext>(job));
@@ -58,11 +58,11 @@ namespace Tube.Specs
             secondTask.Setup(x => x.GetName()).Returns("task2");
             Subject.RegisterTask(firstTask.Object);
             Subject.RegisterTask(secondTask.Object);
-            The<ITaskOrderer>().WhenToldTo(x => x.Order(Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { firstTask.Object, secondTask.Object });      
+            The<ITaskOrderer>().WhenToldTo(x => x.Order("task2", Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { firstTask.Object, secondTask.Object });      
         };
 
-        Because of = () => Subject.Run(job);
-        It should_calculate_the_task_order = () => The<ITaskOrderer>().WasToldTo(x => x.Order(Param<IEnumerable<ITask<FakeTaskContext>>>.Matches(m => m.First() == firstTask.Object && m.Last() == secondTask.Object)));
+        Because of = () => Subject.Run("task2", job);
+        It should_calculate_the_task_order = () => The<ITaskOrderer>().WasToldTo(x => x.Order("task2", Param<IEnumerable<ITask<FakeTaskContext>>>.Matches(m => m.First() == firstTask.Object && m.Last() == secondTask.Object)));
         It should_execute_the_first_task = () => firstTask.Object.WasToldTo(x => x.Execute(job));
         It should_execute_the_second_task = () => secondTask.Object.WasToldTo(x => x.Execute(job));
     }

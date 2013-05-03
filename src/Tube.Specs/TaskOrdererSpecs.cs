@@ -18,7 +18,7 @@ namespace Tube.Specs
             task.Setup(x => x.GetName()).Returns("task1");
             tasks.Add(task.Object);
         };
-        Because of = () => result = Subject.Order(tasks);
+        Because of = () => result = Subject.Order("task1", tasks);
         It should_return_the_task = () => result.ShouldContainOnly(task.Object);
     }
 
@@ -38,7 +38,7 @@ namespace Tube.Specs
                 tasks.Add(task1.Object);
                 
             };
-        Because of = () => result = Subject.Order(tasks);
+        Because of = () => result = Subject.Order("task2", tasks);
         It should_return_the_tasks_in_order = () =>
             {
                 result.First().ShouldEqual(task1.Object);
@@ -66,7 +66,7 @@ namespace Tube.Specs
             tasks.Add(task3.Object);
 
         };
-        Because of = () => result = Subject.Order(tasks);
+        Because of = () => result = Subject.Order("task3", tasks);
         It should_return_the_tasks_in_order = () =>
         {
             result.ToArray()[0].ShouldEqual(task1.Object);
@@ -94,7 +94,7 @@ namespace Tube.Specs
             tasks.Add(task3.Object);
 
         };
-        Because of = () => result = Subject.Order(tasks);
+        Because of = () => result = Subject.Order("task3", tasks);
         It should_return_the_tasks_in_order = () =>
         {
             result.ToArray()[1].ShouldEqual(task1.Object);
@@ -124,7 +124,7 @@ namespace Tube.Specs
             tasks.Add(task3.Object);
 
         };
-        Because of = () => result = Subject.Order(tasks);
+        Because of = () => result = Subject.Order("task3", tasks);
         It should_return_the_tasks_in_order = () =>
         {
             result.ToArray()[0].ShouldEqual(task1.Object);
@@ -152,7 +152,7 @@ namespace Tube.Specs
             tasks.Add(task1.Object);
 
         };
-        Because of = () => exception = Catch.Exception(() => Subject.Order(tasks).ToList());
+        Because of = () => exception = Catch.Exception(() => Subject.Order("task3", tasks).ToList());
         It should_throw_exception = () => 
             exception.Message.ShouldEqual("There were circular dependencies");
     }
@@ -177,7 +177,7 @@ namespace Tube.Specs
             tasks.Add(task1.Object);
             tasks.Add(task3.Object);
         };
-        Because of = () => exception = Catch.Exception(() => Subject.Order(tasks).ToList());
+        Because of = () => exception = Catch.Exception(() => Subject.Order("task3", tasks).ToList());
         It should_throw_exception = () =>
             exception.Message.ShouldEqual("There were circular dependencies");
     }
