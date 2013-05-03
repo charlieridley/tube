@@ -58,4 +58,20 @@ namespace Tube.Specs
         Because of = () => Subject.PublishMessage(publishedMessage);
         It should_receive_the_published_message = () => receivedMesage.ShouldEqual(publishedMessage);
     }
+    
+    [Subject(typeof (Pipeline<FakeTaskContext>))]
+    public class when_a_message_is_published_with_two_subscribers : WithSubject<Pipeline<FakeTaskContext>>
+    {
+        private static FakeMessage publishedMessage = new FakeMessage();
+        private static FakeMessage receivedMesage1;
+        private static FakeMessage receivedMesage2;
+        Establish context = () =>
+            {
+                Subject.Subscribe<FakeMessage>(m => receivedMesage1 = m);
+                Subject.Subscribe<FakeMessage>(m => receivedMesage2 = m);
+            };
+        Because of = () => Subject.PublishMessage(publishedMessage);
+        It should_receive_the_first_published_message = () => receivedMesage1.ShouldEqual(publishedMessage);
+        It should_receive_the_second_published_message = () => receivedMesage2.ShouldEqual(publishedMessage);
+    }
 }
