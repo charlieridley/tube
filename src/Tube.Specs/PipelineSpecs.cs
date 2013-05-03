@@ -26,24 +26,6 @@ namespace Tube.Specs
     }
 
     [Subject(typeof (Pipeline<FakeTaskContext>))]
-    public class task_updates_job : WithSubject<Pipeline<FakeTaskContext>>
-    {
-        private static Mock<ITask<FakeTaskContext>> task;
-        private static FakeTaskContext job = new FakeTaskContext();
-        private static JobUpdatedEventArgs<FakeTaskContext> eventArgs;
-        Establish context = () =>
-        {
-            task = new Mock<ITask<FakeTaskContext>>();
-            task.Setup(x => x.GetName()).Returns("task1");
-            Subject.RegisterTask(task.Object);
-            Subject.Run("task1", job);
-            Subject.JobUpdated += (s, e) => eventArgs = e;
-        };
-        Because of = () => task.Raise(x => x.JobUpdated += null, new JobUpdatedEventArgs<FakeTaskContext>(job));
-        It should_fire_the_job_updated_event_on_the_pipeline = () => eventArgs.Context.ShouldEqual(job);
-    }
-
-    [Subject(typeof (Pipeline<FakeTaskContext>))]
     public class task_has_dependencies : WithSubject<Pipeline<FakeTaskContext>>
     {
         private static Mock<ITask<FakeTaskContext>> firstTask;
@@ -65,5 +47,15 @@ namespace Tube.Specs
         It should_calculate_the_task_order = () => The<ITaskOrderer>().WasToldTo(x => x.Order("task2", Param<IDictionary<string, ITask<FakeTaskContext>>>.Matches(m => m.First().Value == firstTask.Object && m.Last().Value == secondTask.Object)));
         It should_execute_the_first_task = () => firstTask.Object.WasToldTo(x => x.Execute(job));
         It should_execute_the_second_task = () => secondTask.Object.WasToldTo(x => x.Execute(job));
+    }
+
+    [Subject(typeof (Pipeline<FakeTaskContext>))]
+    public class when_a_message_is_published_with_one_subscriber : WithSubject<Pipeline<FakeTaskContext>>
+    {
+        private static FakeMessage publishedMessage = new FakeMessage();
+        private static FakeMessage receivedMesage;
+        Establish context = () => Subject.Subscribe<FakeMessage>(m => receivedMesage = m);
+        Because of = () => Subject.PublishMessage(publishedMessage);
+        It should_receive_the_published_message = () => receivedMesage.ShouldEqual(publishedMessage);
     }
 }

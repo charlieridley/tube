@@ -1,11 +1,9 @@
-using System;
-
 namespace Tube
 {
-    public interface IPipeline<T>
+    public interface IPipeline<TContext>
     {
-        T Run(string taskName, T context);
-        IPipeline<T> RegisterTask(ITask<T> task);
-        event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
+        TContext Run(string taskName, TContext context);
+        IPipeline<TContext> RegisterTask(ITask<TContext> task);
+        void PublishMessage<TMessage>(TMessage message);
     }
 }
