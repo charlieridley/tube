@@ -22,7 +22,7 @@ namespace Tube
 
         public event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
 
-        public T Run(string taskName, T context)
+        public T Run(T context)
         {
             var taskPipeline = taskOrderer.Order(tasks);
 

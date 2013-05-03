@@ -117,7 +117,7 @@ namespace Tube.IntegrationTests
                                       .RegisterTask(new IcingPreparer())
                                       .RegisterTask(new CakeDecorator())
                                       .RegisterTask(new CakeBuilder());
-        Because of = () => pipeline.Run("make cake", cakeMaker);
+        Because of = () => pipeline.Run(cakeMaker);
         private It should_have_been_weighed = () => cakeMaker.Weighed.ShouldBeTrue();
         It should_have_been_mixed = () => cakeMaker.Mixed.ShouldBeTrue();
         It should_have_been_baked = () => cakeMaker.Baked.ShouldBeTrue();
