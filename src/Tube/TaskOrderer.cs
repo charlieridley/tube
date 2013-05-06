@@ -19,10 +19,10 @@ namespace Tube
                 .Select(name => taskDictionary[name]);
         }
 
-        IEnumerable<string> Order(IDictionary<string, List<string>> adjacencyList)
+        private IEnumerable<string> Order(IDictionary<string, List<string>> adjacencyList)
         {
             var sortedList = new List<string>();
-            var noDependencies = adjacencyList.Where(kvp => kvp.Value == null || !kvp.Value.Any()).ToList();
+            var noDependencies = adjacencyList.Where(x => x.Value == null || !x.Value.Any()).ToList();
 
             while (noDependencies.Any())
             {
@@ -30,7 +30,7 @@ namespace Tube
                 sortedList.Add(checking.Key);
                 noDependencies.Remove(checking);
 
-                foreach (var node in adjacencyList.Where(kvp => kvp.Value.Contains(checking.Key)))
+                foreach (var node in adjacencyList.Where(x => x.Value.Contains(checking.Key)))
                 {
                     node.Value.Remove(checking.Key);
                     if (!node.Value.Any())

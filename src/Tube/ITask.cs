@@ -2,10 +2,9 @@
 
 namespace Tube
 {
-    public interface ITask<T>
+    public interface ITask<TContext>
     {
-        void Execute(T job);
-        event EventHandler<JobUpdatedEventArgs<T>> JobUpdated;
+        void Execute(TContext job);
         string GetName();
         string[] GetDependencies();
     }

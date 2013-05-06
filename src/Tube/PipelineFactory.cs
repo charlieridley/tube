@@ -2,9 +2,9 @@
 {
     public static class PipelineFactory
     {
-        public static IPipeline<T> Create<T>()
+        public static IPipeline<TContext> Create<TContext>()
         {
-            return new Pipeline<T>(new TaskOrderer());
+            return new Pipeline<TContext>(new TaskOrderer());
         }
     }
 }
