@@ -75,7 +75,8 @@ public class CakeBuilder : Task<CakeMaker>
 }
 
 ```
-Create a pipeline and configure that all (autoconfigure coming very soon):
+Create a pipeline and register tasks (autoconfigure coming very soon):
+-
 ```c#
 var factory = new PipelineFactory();
 var pipeline = factory.Create<CakeMaker>()
@@ -135,5 +136,5 @@ public class MyInstanceResolver : IInstanceResolver
 And tell your PipelineFactory to use it:
 ```c#
 var pipelineFactory = new PipelineFactory();
-pipelineFactory.Configure().SetInstanceResoolver(new MyInstanceResolver());
+pipelineFactory.Configure().SetInstanceResolver(new MyInstanceResolver());
 ```
