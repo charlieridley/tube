@@ -101,6 +101,24 @@ Cake iced
 Cake decorated
 Cake made
 ```
+Messaging
+-
+Subscribe to update messages for your task like this:
+```c#
+pipeline.Subscribe<TaskUpdated>(x => Console.WriteLine(x.Message))
+```
+Publish messages from your tasks like this:
+```c#
+[TaskName("foobar")]
+public class CakeBuilder : Task<CakeMaker>
+{
+  public override void Execute(CakeMaker context)
+  {
+    //some codings
+    PublishMessage(new TaskUpdated{Message = "It's all going fine"));    
+  } 
+}
+```
 Config
 -
 You probably want to use your own DI container. Fortunately this is easy, you just need to create your own instance resolver:
