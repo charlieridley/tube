@@ -110,12 +110,12 @@ namespace Tube.IntegrationTests
         private static CakeMaker cakeMaker = new CakeMaker();
         Establish context = () =>
             pipeline = PipelineFactory.Create<CakeMaker>()
-                                      .RegisterTask(new Weigher())
-                                      .RegisterTask(new Mixer())
-                                      .RegisterTask(new Baker())
-                                      .RegisterTask(new IcingPreparer())
-                                      .RegisterTask(new CakeDecorator())
-                                      .RegisterTask(new CakeBuilder());
+                                      .RegisterTask<Weigher>()
+                                      .RegisterTask<Mixer>()
+                                      .RegisterTask<Baker>()
+                                      .RegisterTask<IcingPreparer>()
+                                      .RegisterTask<CakeDecorator>()
+                                      .RegisterTask<CakeBuilder>();
         Because of = () => pipeline.Run("make cake", cakeMaker);
         private It should_have_been_weighed = () => cakeMaker.Weighed.ShouldBeTrue();
         It should_have_been_mixed = () => cakeMaker.Mixed.ShouldBeTrue();
@@ -130,12 +130,12 @@ namespace Tube.IntegrationTests
         private static CakeMaker cakeMaker = new CakeMaker();
         Establish context = () =>
             pipeline = PipelineFactory.Create<CakeMaker>()
-                                      .RegisterTask(new Weigher())
-                                      .RegisterTask(new Mixer())
-                                      .RegisterTask(new Baker())
-                                      .RegisterTask(new IcingPreparer())
-                                      .RegisterTask(new CakeDecorator())
-                                      .RegisterTask(new CakeBuilder());
+                                      .RegisterTask<Weigher>()
+                                      .RegisterTask<Mixer>()
+                                      .RegisterTask<Baker>()
+                                      .RegisterTask<IcingPreparer>()
+                                      .RegisterTask<CakeDecorator>()
+                                      .RegisterTask<CakeBuilder>();
         Because of = () => pipeline.Run("bake", cakeMaker);
         private It should_have_been_weighed = () => cakeMaker.Weighed.ShouldBeTrue();
         It should_have_been_mixed = () => cakeMaker.Mixed.ShouldBeTrue();

@@ -40,12 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IInstanceResolver.cs" />
+    <Compile Include="InstanceResolver.cs" />
     <Compile Include="IPipeline.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskOrderer.cs" />
     <Compile Include="PipelineFactory.cs" />
     <Compile Include="TaskDependsOnAttribute.cs" />
     <Compile Include="TaskNameAttributre.cs" />
+    <Compile Include="TaskTypeExtensions.cs" />
     <Compile Include="TaskUpdatedEventArgs.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

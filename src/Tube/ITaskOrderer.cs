@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Tube
 {
     public interface ITaskOrderer
     {
-        IEnumerable<ITask<T>> Order<T>(string taskName, IEnumerable<ITask<T>> tasks);
+        IEnumerable<Type> Order(string taskName, IEnumerable<Type> tasks);
     }
 }

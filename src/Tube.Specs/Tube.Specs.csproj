@@ -55,10 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeTaskContext.cs" />
+    <Compile Include="FakeTasks.cs" />
     <Compile Include="PipelineSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskOrdererSpecs.cs" />
+    <Compile Include="TaskOrdererTasks.cs" />
     <Compile Include="TaskSpecs.cs" />
+    <Compile Include="TaskTypeExtensionsSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
@@ -10,43 +11,21 @@ namespace Tube.Specs
     [Subject(typeof(Pipeline<FakeTaskContext>))]
     public class running_one_task : WithSubject<Pipeline<FakeTaskContext>>
     {
-        private static Mock<ITask<FakeTaskContext>> task;
+        private static FakeTask task;
         private static FakeTaskContext job = new FakeTaskContext();
         private static FakeTaskContext result;
         Establish context = () =>
             {
-                task = new Mock<ITask<FakeTaskContext>>();
-                task.Setup(x => x.GetName()).Returns("task1");
-                Subject.RegisterTask(task.Object);
-                The<ITaskOrderer>().WhenToldTo(x => x.Order("task1", Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { task.Object });      
+                task = new FakeTask();
+                Subject.RegisterTask<FakeTask>();
+                The<IInstanceResolver>().WhenToldTo(x => x.Create(typeof(FakeTask))).Return(task);
+                The<ITaskOrderer>().WhenToldTo(x => x.Order(Param<string>.IsAnything, Param<IEnumerable<Type>>.IsAnything)).Return(new[] { typeof(FakeTask) });      
             };
-        Because of = () => result = Subject.Run("task1", job);        
-        It should_execute_the_task = () => task.Object.WasToldTo(x => x.Execute(job));
+        Because of = () => result = Subject.Run("fake task", job);        
+        It should_create_an_instance_of_the_task = () => The<IInstanceResolver>().WasToldTo(x => x.Create(typeof(FakeTask)));
+        It should_calculate_the_task_order = () => The<ITaskOrderer>().WasToldTo(x => x.Order("fake task", Param<IEnumerable<Type>>.Matches(m => m.First() == typeof(FakeTask))));
+        It should_execute_the_task = () => task.Executed.ShouldEqual(job);
         It should_return_the_context = () => result.ShouldEqual(job);
-    }
-
-    [Subject(typeof (Pipeline<FakeTaskContext>))]
-    public class task_has_dependencies : WithSubject<Pipeline<FakeTaskContext>>
-    {
-        private static Mock<ITask<FakeTaskContext>> firstTask;
-        private static Mock<ITask<FakeTaskContext>> secondTask;
-        private static FakeTaskContext job = new FakeTaskContext();
-        private static JobUpdatedEventArgs<FakeTaskContext> eventArgs;
-        Establish context = () =>
-        {
-            firstTask = new Mock<ITask<FakeTaskContext>>();
-            firstTask.Setup(x => x.GetName()).Returns("task1");
-            secondTask = new Mock<ITask<FakeTaskContext>>();
-            secondTask.Setup(x => x.GetName()).Returns("task2");
-            Subject.RegisterTask(firstTask.Object);
-            Subject.RegisterTask(secondTask.Object);
-            The<ITaskOrderer>().WhenToldTo(x => x.Order("task2", Param<IEnumerable<ITask<FakeTaskContext>>>.IsAnything)).Return(new[] { firstTask.Object, secondTask.Object });      
-        };
-
-        Because of = () => Subject.Run("task2", job);
-        It should_calculate_the_task_order = () => The<ITaskOrderer>().WasToldTo(x => x.Order("task2", Param<IEnumerable<ITask<FakeTaskContext>>>.Matches(m => m.First() == firstTask.Object && m.Last() == secondTask.Object)));
-        It should_execute_the_first_task = () => firstTask.Object.WasToldTo(x => x.Execute(job));
-        It should_execute_the_second_task = () => secondTask.Object.WasToldTo(x => x.Execute(job));
     }
 
     [Subject(typeof(Pipeline<FakeTaskContext>))]

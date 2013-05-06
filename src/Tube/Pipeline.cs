@@ -7,25 +7,36 @@ namespace Tube
     public class Pipeline<TContext> : IPipeline<TContext>
     {
         private readonly ITaskOrderer taskOrderer;
-        private readonly List<ITask<TContext>> tasks = new List<ITask<TContext>>();
+        private readonly IInstanceResolver instanceResolver;
+        private readonly List<ITask<TContext>> taskInstances = new List<ITask<TContext>>();
+        private readonly List<Type> tasks = new List<Type>();
         private readonly Dictionary<Type, List<object>> subscribers = new Dictionary<Type, List<object>>();
-        public Pipeline(ITaskOrderer taskOrderer)
+        public Pipeline(ITaskOrderer taskOrderer, IInstanceResolver instanceResolver)
         {
             this.taskOrderer = taskOrderer;
+            this.instanceResolver = instanceResolver;
         }
 
 
         public IPipeline<TContext> RegisterTask(ITask<TContext> task)
         {
-            tasks.Add(task);           
+            taskInstances.Add(task);           
+            return this;
+        }
+
+        public IPipeline<TContext> RegisterTask<TTask>() 
+            where TTask : ITask<TContext>
+        {
+            tasks.Add(typeof(TTask));
             return this;
         }
 
         public TContext Run(string taskName, TContext context)
         {
             var taskPipeline = taskOrderer.Order(taskName, tasks);
-            foreach (var task in taskPipeline)
+            foreach (var taskType in taskPipeline)
             {
+                var task = instanceResolver.Create(taskType) as ITask<TContext>;
                 task.Execute(context);
             }
 
