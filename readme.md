@@ -86,7 +86,7 @@ var pipeline = factory.Create<CakeMaker>()
                       .RegisterTask<CakeDecorator>()
                       .RegisterTask<CakeBuilder>();
 ```
-Git Er Done
+Run the task
 -
 ```c#
 var cakeMaker = new CakeMaker();
