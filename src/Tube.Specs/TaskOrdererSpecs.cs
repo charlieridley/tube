@@ -21,14 +21,9 @@ namespace Tube.Specs
     public class task_with_dependency : WithSubject<TaskOrderer>
     {
         private static List<Type> tasks = new List<Type>();
-        private static Mock<ITask<FakeTaskContext>> task1 = new Mock<ITask<FakeTaskContext>>();
-        private static Mock<ITask<FakeTaskContext>> task2 = new Mock<ITask<FakeTaskContext>>();
         private static IEnumerable<Type> result;
         Establish context = () =>
             {
-                task1.Setup(x => x.GetName()).Returns("task1");
-                task2.Setup(x => x.GetName()).Returns("task2");
-                task2.Setup(x => x.GetDependencies()).Returns(new[]{"task1"});
                 tasks.Add(typeof(TaskOrdererTask1));
                 tasks.Add(typeof(TaskOrdererTask2));
                 

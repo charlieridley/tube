@@ -4,8 +4,7 @@ namespace Tube
 {
     public interface ITask<TContext>
     {
-        void Execute(TContext job);
-        string GetName();
-        string[] GetDependencies();
+        void Execute(TContext job);        
+        void PublishMessage<TMessage>(TMessage message);
     }
 }
