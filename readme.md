@@ -76,13 +76,14 @@ public class CakeBuilder : Task<CakeMaker>
 ```
 Create a pipeline and configure that all (autoconfigure coming very soon):
 ```c#
-var pipeline = PipelineFactory.Create<CakeMaker>()
-                              .RegisterTask<Weigher>()
-                              .RegisterTask<Mixer>()
-                              .RegisterTask<Baker>()
-                              .RegisterTask<IcingPreparer>()
-                              .RegisterTask<CakeDecorator>()
-                              .RegisterTask<CakeBuilder>();
+var factory = new PipelineFactory();
+var pipeline = factory.Create<CakeMaker>()
+                      .RegisterTask<Weigher>()
+                      .RegisterTask<Mixer>()
+                      .RegisterTask<Baker>()
+                      .RegisterTask<IcingPreparer>()
+                      .RegisterTask<CakeDecorator>()
+                      .RegisterTask<CakeBuilder>();
 ```
 Git Er Done
 ===========
