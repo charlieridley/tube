@@ -37,6 +37,7 @@ namespace Tube
             foreach (var taskType in taskPipeline)
             {
                 var task = instanceResolver.Create(taskType) as ITask<TContext>;
+                task.RegisterPipeline(this);
                 task.Execute(context);
             }
 
