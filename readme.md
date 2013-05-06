@@ -2,11 +2,12 @@
 
 Tube is a basic task pipeline for C#
 
+```
+install-package tube
+```
 
-Here's how it works
-===================
-
-First, define your tasks:
+Create some tasks
+-
 
 ```c#
 [TaskName("weigh ingredients")]
@@ -86,7 +87,7 @@ var pipeline = factory.Create<CakeMaker>()
                       .RegisterTask<CakeBuilder>();
 ```
 Git Er Done
-===========
+-
 ```c#
 var cakeMaker = new CakeMaker();
 pipeline.Run("make cake", cakeMaker);
@@ -100,4 +101,21 @@ Cake iced
 Cake decorated
 Cake made
 ```
-![choo cho](images/underground.png)
+Config
+-
+You probably want to use your own DI container. Fortunately this is easy, you just need to create your own instance resolver:
+
+```c#
+public class MyInstanceResolver : IInstanceResolver
+{
+  public object Create(Type type)
+  {
+    //your container resolve code
+  }
+}
+```
+And tell your PipelineFactory to use it:
+```c#
+var pipelineFactory = new PipelineFactory();
+pipelineFactory.Configure().SetInstanceResoolver(new MyInstanceResolver());
+```
