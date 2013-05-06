@@ -1,4 +1,3 @@
-![choo cho](images/underground.png)
 #Tube
 
 Tube is a basic task pipeline for C#
@@ -77,13 +76,14 @@ public class CakeBuilder : Task<CakeMaker>
 ```
 Create a pipeline and configure that all (autoconfigure coming very soon):
 ```c#
-var pipeline = PipelineFactory.Create<CakeMaker>()
-                              .RegisterTask(new Weigher())
-                              .RegisterTask(new Mixer())
-                              .RegisterTask(new Baker())
-                              .RegisterTask(new IcingPreparer())
-                              .RegisterTask(new CakeDecorator())
-                              .RegisterTask(new CakeBuilder());
+var factory = new PipelineFactory();
+var pipeline = factory.Create<CakeMaker>()
+                      .RegisterTask<Weigher>()
+                      .RegisterTask<Mixer>()
+                      .RegisterTask<Baker>()
+                      .RegisterTask<IcingPreparer>()
+                      .RegisterTask<CakeDecorator>()
+                      .RegisterTask<CakeBuilder>();
 ```
 Git Er Done
 ===========
@@ -100,3 +100,4 @@ Cake iced
 Cake decorated
 Cake made
 ```
+![choo cho](images/underground.png)
