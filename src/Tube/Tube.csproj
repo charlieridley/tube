@@ -43,6 +43,7 @@
     <Compile Include="InstanceResolver.cs" />
     <Compile Include="IPipeline.cs" />
     <Compile Include="IPipelineConfiguration.cs" />
+    <Compile Include="IPipelineFactory.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskOrderer.cs" />
     <Compile Include="PipelineConfiguration.cs" />

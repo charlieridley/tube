@@ -1,14 +1,14 @@
 ﻿namespace Tube
 {
-    public static class PipelineFactory
+    public class PipelineFactory : IPipelineFactory
     {
-        private static IPipelineConfiguration pipelineConfiguration = new PipelineConfiguration(new InstanceResolver());
-        public static IPipelineConfiguration Configure()
+        private IPipelineConfiguration pipelineConfiguration = new PipelineConfiguration(new InstanceResolver());
+        public IPipelineConfiguration Configure()
         {
             return pipelineConfiguration;
         }
 
-        public static IPipeline<TContext> Create<TContext>()
+        public IPipeline<TContext> Create<TContext>()
         {
             return new Pipeline<TContext>(new TaskOrderer(), pipelineConfiguration.InstanceResolver);
         }

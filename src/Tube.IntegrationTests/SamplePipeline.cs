@@ -109,7 +109,7 @@ namespace Tube.IntegrationTests
         private static IPipeline<CakeMaker> pipeline;
         private static CakeMaker cakeMaker = new CakeMaker();
         Establish context = () =>
-            pipeline = PipelineFactory.Create<CakeMaker>()
+            pipeline = new PipelineFactory().Create<CakeMaker>()
                                       .RegisterTask<Weigher>()
                                       .RegisterTask<Mixer>()
                                       .RegisterTask<Baker>()
@@ -129,7 +129,7 @@ namespace Tube.IntegrationTests
         private static IPipeline<CakeMaker> pipeline;
         private static CakeMaker cakeMaker = new CakeMaker();
         Establish context = () =>
-            pipeline = PipelineFactory.Create<CakeMaker>()
+            pipeline = new PipelineFactory().Create<CakeMaker>()
                                       .RegisterTask<Weigher>()
                                       .RegisterTask<Mixer>()
                                       .RegisterTask<Baker>()
