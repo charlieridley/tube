@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionTask.cs" />
+    <Compile Include="IExceptionTask.cs" />
     <Compile Include="IInstanceResolver.cs" />
     <Compile Include="InstanceResolver.cs" />
     <Compile Include="IPipeline.cs" />
@@ -48,6 +50,7 @@
     <Compile Include="ITaskOrderer.cs" />
     <Compile Include="PipelineConfiguration.cs" />
     <Compile Include="PipelineFactory.cs" />
+    <Compile Include="TaskBase.cs" />
     <Compile Include="TaskDependsOnAttribute.cs" />
     <Compile Include="TaskNameAttributre.cs" />
     <Compile Include="TaskTypeExtensions.cs" />
