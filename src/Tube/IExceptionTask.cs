@@ -2,10 +2,8 @@
 
 namespace Tube
 {
-    public interface IExceptionTask<TContext>
+    public interface IExceptionTask<TContext> : ITaskBase<TContext>
     {
-        void Execute(ITask<TContext> failedTask, TContext context, Exception exception);       
-        void RegisterPipeline(IPipeline<TContext> pipeline);
-        void PublishMessage<TMessage>(TMessage message);
+        void Execute(ITask<TContext> failedTask, TContext context, Exception exception);
     }
 }

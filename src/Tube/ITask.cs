@@ -1,9 +1,7 @@
 ﻿namespace Tube
 {
-    public interface ITask<TContext>
+    public interface ITask<TContext> : ITaskBase<TContext>
     {
-        void Execute(TContext job);        
-        void PublishMessage<TMessage>(TMessage message);
-        void RegisterPipeline(IPipeline<TContext> pipeline);
+        void Execute(TContext job);
     }
 }

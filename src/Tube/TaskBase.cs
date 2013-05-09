@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tube
 {
-    public abstract class TaskBase<TContext>
+    public abstract class TaskBase<TContext> : ITaskBase<TContext>
     {
         private IPipeline<TContext> pipeline;
         public void RegisterPipeline(IPipeline<TContext> pipeline)

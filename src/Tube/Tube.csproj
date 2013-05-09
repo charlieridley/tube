@@ -47,6 +47,7 @@
     <Compile Include="IPipelineConfiguration.cs" />
     <Compile Include="IPipelineFactory.cs" />
     <Compile Include="ITask.cs" />
+    <Compile Include="ITaskBase.cs" />
     <Compile Include="ITaskOrderer.cs" />
     <Compile Include="PipelineConfiguration.cs" />
     <Compile Include="PipelineFactory.cs" />
