@@ -50,12 +50,13 @@ namespace Tube
                         throw;
                     }
 
-                    var exceptionTask = instanceResolver.Create(exceptionTaskType) as IExceptionTask<TContext>;
+                    var exceptionTask = instanceResolver.Create(exceptionTaskType) as IExceptionTask<TContext>;                    
                     if (exceptionTask == null)
                     {
                         throw;
                     }
 
+                    exceptionTask.RegisterPipeline(this);
                     exceptionTask.Execute(task, context, exception);
                     break;
                 }
