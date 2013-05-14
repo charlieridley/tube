@@ -21,6 +21,7 @@ namespace Tube.IntegrationTests
         public string Message { get; set; }
     }
 
+
     public class sending_a_message
     {
         private static IPipeline<CakeMaker> pipeline;

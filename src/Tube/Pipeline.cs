@@ -77,6 +77,12 @@ namespace Tube
 
         public void PublishMessage<TMessage>(TMessage message)
         {
+            
+            if (!subscribers.ContainsKey(typeof(TMessage)))
+            {
+                return;
+            }
+
             var subscribersForType = subscribers[typeof(TMessage)].Cast<Action<TMessage>>();
             foreach (var subscription in subscribersForType)
             {
