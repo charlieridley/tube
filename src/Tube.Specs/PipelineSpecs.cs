@@ -38,6 +38,15 @@ namespace Tube.Specs
         It should_receive_the_published_message = () => receivedMesage.ShouldEqual(publishedMessage);
     }
 
+    [Subject(typeof (Pipeline<FakeTaskContext>))]
+    public class when_a_message_is_published_with_no_subscribers : WithSubject<Pipeline<FakeTaskContext>>
+    {
+        private static Exception exception;
+        Because of = () => exception = Catch.Exception(() => Subject.PublishMessage(new FakeMessage()));
+        It should_not_throw_an_exception = () => exception.ShouldBeNull();
+        
+    }
+
     [Subject(typeof(Pipeline<FakeTaskContext>))]
     public class when_a_task_throws_an_exception_an_exception_task_is_registered : WithSubject<Pipeline<FakeTaskContext>>
     {
