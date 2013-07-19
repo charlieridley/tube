@@ -37,9 +37,11 @@ namespace Tube
             var taskPipeline = taskOrderer.Order(taskName, tasks);
             foreach (var taskType in taskPipeline)
             {
-                var task = instanceResolver.Create(taskType) as ITask<TContext>;
+
+                ITask<TContext> task = null;
                 try
                 {
+                    task = instanceResolver.Create(taskType) as ITask<TContext>;
                     task.RegisterPipeline(this);
                     task.Execute(context);
                 }

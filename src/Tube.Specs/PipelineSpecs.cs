@@ -76,7 +76,7 @@ namespace Tube.Specs
     }
 
     [Subject(typeof(Pipeline<FakeTaskContext>))]
-    public class when_a_task_throws_an_exception_an_exception_task_is_not_registered : WithSubject<Pipeline<FakeTaskContext>>
+    public class when_a_task_throws_an_exception_and_an_exception_task_is_not_registered : WithSubject<Pipeline<FakeTaskContext>>
     {
         private static ThrowingExceptionTask task;        
         private static FakeTaskContext fakeContext = new FakeTaskContext();
@@ -109,5 +109,24 @@ namespace Tube.Specs
         };
         Because of = () => exception = Catch.Exception(() => Subject.Run("bad", fakeContext));
         It should_rethrow_the_exception = () => exception.Message.ShouldEqual("nooooo");
+    }
+
+    [Subject(typeof(Pipeline<FakeTaskContext>))]
+    public class when_the_instance_resolver_throws_an_exception : WithSubject<Pipeline<FakeTaskContext>>
+    {
+        private static FakeExceptionTask exceptionTask;
+        private static FakeTaskContext fakeContext = new FakeTaskContext();
+        Establish context = () =>
+        {
+            exceptionTask = new FakeExceptionTask();
+            Subject.RegisterTask<FakeTask>().RegisterExceptionTask<FakeExceptionTask>();
+            The<IInstanceResolver>().WhenToldTo(x => x.Create(typeof(FakeExceptionTask))).Return(exceptionTask);
+            The<IInstanceResolver>().WhenToldTo(x => x.Create(typeof (FakeTask))).Throw(new Exception("omg"));
+            The<ITaskOrderer>().WhenToldTo(x => x.Order(Param<string>.IsAnything, Param<IEnumerable<Type>>.IsAnything)).Return(new[] { typeof(FakeTask) });
+        };
+        Because of = () => Subject.Run("fake task", fakeContext);
+        It should_create_an_instance_of_the_exception_task = () => The<IInstanceResolver>().WasToldTo(x => x.Create(typeof(FakeExceptionTask)));
+        It should_execute_the_exception_task_with_the_context = () => exceptionTask.Context.ShouldEqual(fakeContext);
+        It should_execute_the_exception_task_with_the_exception = () => exceptionTask.Exception.Message.ShouldEqual("omg");
     }
 }
