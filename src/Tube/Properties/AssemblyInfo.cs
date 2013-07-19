@@ -6,5 +6,5 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Tube")]
 [assembly: Guid("9b727c0a-285b-46ad-9dad-9a1f1eec12bd")]
-[assembly: AssemblyVersion("0.1.12")]
-[assembly: AssemblyFileVersion("0.1.12")]
+[assembly: AssemblyVersion("0.1.13")]
+[assembly: AssemblyFileVersion("0.1.13")]
