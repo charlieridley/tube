@@ -45,8 +45,6 @@ _TeamCity.Tube/
 
 #Project files
 [Bb]uild/
-!src/ZBI.ComTrade.Application/QueryProcessing/Build
-!src/ZBI.ComTrade.Application.Specs/QueryProcessing/Build
 #Subversion files
 .svn
 
